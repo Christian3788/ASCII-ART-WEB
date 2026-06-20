@@ -36,7 +36,7 @@ Clone the repository to your local machine.
 Install Go if you haven't already.
 Navigate to the project directory in your terminal.
 Run go run main.go to start the web server.
-Open your web browser and go to http://localhost:3000 to access the application.
+Open your web browser and go to http://localhost:8080 to access the application.
 Tests
 go test ./tests
 Usage
