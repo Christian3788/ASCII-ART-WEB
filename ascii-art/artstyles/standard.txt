@@ -1,0 +1,3 @@
+Standard font sample
+====================
+ A B C D E F G
