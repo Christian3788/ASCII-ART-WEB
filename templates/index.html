@@ -13,6 +13,10 @@
     <button id="submit-button" type="submit">Generate</button>
   </form>
 
+  {{ if .SelectedStyle }}
+    <p>Selected style: <strong>{{ .SelectedStyle }}</strong></p>
+  {{ end }}
+
   {{ if .Error }}
     <p style="color: red">{{ .Error }}</p>
   {{ end }}
