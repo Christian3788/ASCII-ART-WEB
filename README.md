@@ -2,6 +2,7 @@ ASCII Art Web
 ASCII Art Web is a simple web application that allows users to generate ASCII art based on different art styles and input text. Users can select an art style and provide text, and the application will generate and display ASCII art corresponding to the chosen style.
 
 Features
+
 Select from different art styles: Standard, Shadow, ThinkerToy.
 Input your own text to generate custom ASCII art.
 User-friendly web interface for easy interaction.
@@ -31,6 +32,7 @@ ascii-art-web
 │   └── layout.html
 └── tests
     └── main_test.go
+    
 How to Run
 Clone the repository to your local machine.
 Install Go if you haven't already.
@@ -39,6 +41,7 @@ Run go run main.go to start the web server.
 Open your web browser and go to http://localhost:8080 to access the application.
 Tests
 go test ./tests
+
 Usage
 Open the web application in your browser.
 Select an art style from the provided options.
