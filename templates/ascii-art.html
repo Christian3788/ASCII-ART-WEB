@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascii Art Result</title>
+    <style>
+        body { font-family: "Courier New", Courier, monospace; margin: 2rem; background: #f4f5f7; color: #1a1a1a; }
+        .card { background: white; border-radius: 10px; box-shadow: 0 0 16px rgba(0,0,0,.08); padding: 24px; max-width: 900px; margin: auto; }
+        pre { background: #212529; color: #f8f9fa; padding: 16px; border-radius: 8px; overflow-x: auto; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .meta { margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="meta">
+            <h1>Ascii Art Result</h1>
+            <p><strong>Banner:</strong> {{.Banner}}</p>
+            <p><strong>Text:</strong> {{.Text}}</p>
+        </div>
+        <pre>{{.Result}}</pre>
+        <p><a href="/">Back to form</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascii Art Web</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; background: #f8f9fa; color: #20232a; }
+        .card { background: white; border-radius: 10px; box-shadow: 0 0 16px rgba(0,0,0,.1); padding: 24px; max-width: 640px; margin: auto; }
+        fieldset { border: 1px solid #dee2e6; border-radius: 8px; padding: 16px; margin-top: 1rem; }
+        legend { padding: 0 10px; font-weight: bold; }
+        label { display: block; margin-bottom: 0.75rem; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; }
+        button { background: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .hint { color: #495057; font-size: 0.95rem; margin-top: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Ascii Art Web</h1>
+        <p>Enter text and choose a banner style to generate ASCII art.</p>
+
+        <form action="/ascii-art" method="post">
+            <label for="text">Text</label>
+            <input id="text" name="text" type="text" placeholder="Type a message" required maxlength="100">
+
+            <fieldset>
+                <legend>Banner style</legend>
+                <label><input type="radio" name="banner" value="standard" checked> Standard</label>
+                <label><input type="radio" name="banner" value="shadow"> Shadow</label>
+                <label><input type="radio" name="banner" value="thinkertoy"> Thinkertoy</label>
+            </fieldset>
+
+            <button type="submit">Generate ASCII Art</button>
+        </form>
+
+        <p class="hint">Supported characters: letters A-Z, digits 0-9, and spaces.</p>
+    </div>
+</body>
+</html>
