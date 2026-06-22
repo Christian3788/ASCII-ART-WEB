@@ -1,1 +1,8 @@
+# Build artifacts
 ascii-art-web
+
+# Test output
+*.test
+
+# Editor directories
+.vscode/
