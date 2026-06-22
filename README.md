@@ -55,6 +55,7 @@ Ascii-art-web is a Go web application that converts user input into ASCII art us
 ## Authors
 
 - christianotieno
+- hanayo
 
 ## Usage
 
