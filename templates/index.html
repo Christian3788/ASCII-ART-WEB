@@ -4,40 +4,208 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCII Art Web Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; background-color: #f9f9f9; color: #333; }
-        textarea { width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .options { margin: 20px 0; }
-        label { margin-right: 15px; font-weight: bold; cursor: pointer; }
-        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; }
-        button:hover { background-color: #0056b3; }
-        .result-container { margin-top: 30px; background: #222; color: #00ff00; padding: 20px; border-radius: 6px; overflow-x: auto; }
-        pre { margin: 0; font-family: monospace; line-height: 1.2; }
+        :root {
+            --bg-color: #0f172a;        /* Sleek Slate Dark Blue */
+            --card-bg: #1e293b;         /* Dark Lighter Slate Component Box */
+            --text-main: #f8fafc;       /* Crisp White Text */
+            --text-muted: #94a3b8;      /* Muted Slate Gray Text */
+            --accent-primary: #38bdf8;    /* Vibrant Sky Cyan */
+            --accent-secondary: #06b6d4;  /* Deep Electric Teal */
+            --border-color: #334155;    /* Deep Border Separator Grid */
+            
+            /* NEW DESIGN VARIABLES */
+            --result-bg: #020617;       /* Ultra Deep Midnight Black for Result Background */
+            --result-text: #22d3ee;     /* High-Contrast Electric Cyan for ASCII Font */
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            max-width: 950px; 
+            margin: 0 auto; 
+            padding: 50px 20px; 
+            background-color: var(--bg-color); 
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+
+        h1 span {
+            color: var(--accent-primary);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            font-size: 1rem;
+        }
+
+        form {
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        }
+
+        textarea { 
+            width: 100%; 
+            padding: 18px; 
+            font-size: 15px; 
+            background-color: #0f172a;
+            color: var(--text-main);
+            border: 1px solid var(--border-color); 
+            border-radius: 10px; 
+            box-sizing: border-box; 
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.25s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+
+        .options { 
+            margin: 30px 0; 
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .radio-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .radio-container input {
+            margin-right: 10px;
+            accent-color: var(--accent-primary);
+            transform: scale(1.15);
+        }
+
+        .radio-container:hover {
+            color: var(--text-main);
+        }
+
+        button { 
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); 
+            color: #0f172a; 
+            border: none; 
+            padding: 14px 32px; 
+            font-size: 15px; 
+            font-weight: 600;
+            border-radius: 10px; 
+            cursor: pointer; 
+            transition: all 0.2s ease;
+        }
+
+        button:hover { 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+            opacity: 0.95;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* ALTERNATIVE: Deep Midnight & High Contrast Cyan Output Canvas */
+        .result-container { 
+            margin-top: 45px; 
+            background: var(--result-bg);
+            color: var(--result-text);
+            padding: 30px; 
+            border-radius: 16px; 
+            border: 1px solid #1e293b;
+            overflow-x: auto; 
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .result-title {
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 12px;
+        }
+
+        /* ALTERNATIVE: Clean Windows/Mac Pro Monospace Alignment */
+        pre { 
+            margin: 0; 
+            font-family: 'Consolas', 'SF Mono', 'Menlo', Monaco, monospace; 
+            font-size: 14px; 
+            line-height: 1.15; 
+            letter-spacing: 0px;
+        }
+
+        .reset-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .reset-link:hover {
+            color: var(--accent-primary);
+        }
     </style>
 </head>
 <body>
 
-    <h1>ASCII Art Web Generator</h1>
-    <p>Type your message below, choose a style, and generate your ASCII banner.</p>
+    <h1>ASCII Art <span>Web Engine</span></h1>
+    <div class="subtitle">Enter text, select your structural layout banner, and view execution results seamlessly.</div>
     
     <form action="/ascii-art" method="POST">
-        <textarea name="text" rows="6" placeholder="Write something here..." required></textarea>
+        <textarea name="text" rows="5" placeholder="Type your text input string here..." required></textarea>
         
         <div class="options">
-            <label><input type="radio" name="banner" value="standard" checked> Standard</label>
-            <label><input type="radio" name="banner" value="shadow"> Shadow</label>
-            <label><input type="radio" name="banner" value="thinkertoy"> Thinkertoy</label>
+            <label class="radio-container">
+                <input type="radio" name="banner" value="standard" checked> Standard Layout
+            </label>
+            <label class="radio-container">
+                <input type="radio" name="banner" value="shadow"> Shadow Blocks
+            </label>
+            <label class="radio-container">
+                <input type="radio" name="banner" value="thinkertoy"> Thinkertoy Slanted
+            </label>
         </div>
         
-        <button type="submit">Generate Banner</button>
+        <button type="submit">Generate Render</button>
     </form>
 
     {{if .}}
     <div class="result-container">
-        <h3>Ascii Art Result:</h3>
+        <div class="result-title">// Render Instance Terminal Output:</div>
         <pre>{{.}}</pre>
     </div>
-    <p><a href="/">Reset / Clear</a></p>
+    <a href="/" class="reset-link">← Clear Canvas Fields</a>
     {{end}}
 
 </body>
