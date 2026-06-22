@@ -4,28 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCII Art Web Generator</title>
+    <!-- Import clean high-visibility typography from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #0f172a;        /* Sleek Slate Dark Blue */
-            --card-bg: #1e293b;         /* Dark Lighter Slate Component Box */
-            --text-main: #f8fafc;       /* Crisp White Text */
-            --text-muted: #94a3b8;      /* Muted Slate Gray Text */
-            --accent-primary: #38bdf8;    /* Vibrant Sky Cyan */
-            --accent-secondary: #06b6d4;  /* Deep Electric Teal */
-            --border-color: #334155;    /* Deep Border Separator Grid */
+            --bg-color: #f8fafc;        /* High-visibility clean light background */
+            --card-bg: #ffffff;         /* Pure white box for the main container */
+            --text-main: #0f172a;       /* Deep slate black for crisp text contrast */
+            --text-muted: #475569;      /* Readable slate gray for descriptions */
+            --accent-primary: #2563eb;    /* Royal Blue for focal points and buttons */
+            --border-color: #cbd5e1;    /* Light clean border layout lines */
             
-            /* NEW DESIGN VARIABLES */
-            --result-bg: #020617;       /* Ultra Deep Midnight Black for Result Background */
-            --result-text: #22d3ee;     /* High-Contrast Electric Cyan for ASCII Font */
+            /* HIGH-VISIBILITY RESULT CONTAINER CONFIGURATION */
+            --result-bg: #1e293b;       /* Dark charcoal slate for excellent contrast */
+            --result-text: #ffffff;     /* Pure crisp white text inside the output */
         }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            max-width: 950px; 
+            max-width: 900px; 
             margin: 0 auto; 
             padding: 50px 20px; 
             background-color: var(--bg-color); 
@@ -34,11 +34,11 @@
         }
 
         h1 {
-            font-size: 2.3rem;
+            font-size: 2.4rem;
             font-weight: 700;
-            letter-spacing: -0.5px;
             color: var(--text-main);
             margin-bottom: 5px;
+            letter-spacing: -0.5px;
         }
 
         h1 span {
@@ -48,7 +48,7 @@
         .subtitle {
             color: var(--text-muted);
             margin-bottom: 35px;
-            font-size: 1rem;
+            font-size: 1.05rem;
         }
 
         form {
@@ -56,27 +56,28 @@
             padding: 35px;
             border-radius: 16px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
         textarea { 
             width: 100%; 
             padding: 18px; 
-            font-size: 15px; 
-            background-color: #0f172a;
+            font-size: 16px; 
+            background-color: #f1f5f9;
             color: var(--text-main);
             border: 1px solid var(--border-color); 
             border-radius: 10px; 
             box-sizing: border-box; 
             font-family: inherit;
             resize: vertical;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         textarea:focus {
             outline: none;
             border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
         .options { 
@@ -91,28 +92,23 @@
             align-items: center;
             cursor: pointer;
             user-select: none;
-            color: var(--text-muted);
+            color: var(--text-main);
             font-weight: 500;
             font-size: 0.95rem;
-            transition: color 0.2s ease;
         }
 
         .radio-container input {
             margin-right: 10px;
             accent-color: var(--accent-primary);
-            transform: scale(1.15);
-        }
-
-        .radio-container:hover {
-            color: var(--text-main);
+            transform: scale(1.2);
         }
 
         button { 
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); 
-            color: #0f172a; 
+            background-color: var(--accent-primary); 
+            color: white; 
             border: none; 
             padding: 14px 32px; 
-            font-size: 15px; 
+            font-size: 16px; 
             font-weight: 600;
             border-radius: 10px; 
             cursor: pointer; 
@@ -120,45 +116,44 @@
         }
 
         button:hover { 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
-            opacity: 0.95;
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
         }
 
         button:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
-        /* ALTERNATIVE: Deep Midnight & High Contrast Cyan Output Canvas */
+        /* NEW HIGH-VISIBILITY CANVAS SPECIFICATIONS */
         .result-container { 
-            margin-top: 45px; 
+            margin-top: 40px; 
             background: var(--result-bg);
             color: var(--result-text);
             padding: 30px; 
-            border-radius: 16px; 
-            border: 1px solid #1e293b;
+            border-radius: 14px; 
+            border: 1px solid #0f172a;
             overflow-x: auto; 
-            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         .result-title {
-            color: var(--text-muted);
+            color: #94a3b8;
             margin-top: 0;
             margin-bottom: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            border-bottom: 1px solid #1e293b;
+            border-bottom: 1px solid #334155;
             padding-bottom: 12px;
         }
 
-        /* ALTERNATIVE: Clean Windows/Mac Pro Monospace Alignment */
+        /* Crisp, clear character definition alignment styles */
         pre { 
             margin: 0; 
-            font-family: 'Consolas', 'SF Mono', 'Menlo', Monaco, monospace; 
+            font-family: 'Consolas', 'SF Mono', 'Courier New', monospace; 
             font-size: 14px; 
-            line-height: 1.15; 
+            line-height: 1.2; 
             letter-spacing: 0px;
         }
 
@@ -167,45 +162,46 @@
             margin-top: 25px;
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: color 0.2s ease;
         }
 
         .reset-link:hover {
             color: var(--accent-primary);
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <h1>ASCII Art <span>Web Engine</span></h1>
-    <div class="subtitle">Enter text, select your structural layout banner, and view execution results seamlessly.</div>
+    <h1>ASCII Art <span>Web Studio</span></h1>
+    <div class="subtitle">Convert custom text strings into functional terminal text banners instantly.</div>
     
     <form action="/ascii-art" method="POST">
-        <textarea name="text" rows="5" placeholder="Type your text input string here..." required></textarea>
+        <textarea name="text" rows="5" placeholder="Enter the text parameters you want transformed..." required></textarea>
         
         <div class="options">
             <label class="radio-container">
-                <input type="radio" name="banner" value="standard" checked> Standard Layout
+                <input type="radio" name="banner" value="standard" checked> Standard Font
             </label>
             <label class="radio-container">
-                <input type="radio" name="banner" value="shadow"> Shadow Blocks
+                <input type="radio" name="banner" value="shadow"> Shadow Font
             </label>
             <label class="radio-container">
-                <input type="radio" name="banner" value="thinkertoy"> Thinkertoy Slanted
+                <input type="radio" name="banner" value="thinkertoy"> Thinkertoy Font
             </label>
         </div>
         
-        <button type="submit">Generate Render</button>
+        <button type="submit">Generate Output</button>
     </form>
 
+    <!-- Appends and prints the resulting data canvas values cleanly -->
     {{if .}}
     <div class="result-container">
-        <div class="result-title">// Render Instance Terminal Output:</div>
+        <div class="result-title">// Processing completed. Terminal output block:</div>
         <pre>{{.}}</pre>
     </div>
-    <a href="/" class="reset-link">← Clear Canvas Fields</a>
+    <a href="/" class="reset-link">← Clear and rewrite string</a>
     {{end}}
 
 </body>
