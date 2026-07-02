@@ -21,6 +21,11 @@
             /* HIGH-VISIBILITY RESULT CONTAINER CONFIGURATION */
             --result-bg: #1e293b;       /* Dark charcoal slate for excellent contrast */
             --result-text: #ffffff;     /* Pure crisp white text inside the output */
+
+            /* NEW VISUAL DESIGN VARIABLES FOR ERROR PANEL HANDLING */
+            --error-bg: #fef2f2;        /* Soft red fill layer */
+            --error-text: #991b1b;      /* Dark blood red for accessible text reading */
+            --error-border: #fca5a5;    /* Accent error framing line */
         }
 
         body { 
@@ -148,6 +153,22 @@
             padding-bottom: 12px;
         }
 
+        /* DYNAMIC APP ERROR CONTAINER STYLING */
+        .error-container {
+            margin-bottom: 25px;
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            border: 1px solid var(--error-border);
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 4px rgba(153, 27, 27, 0.02);
+        }
+
         /* Crisp, clear character definition alignment styles */
         pre { 
             margin: 0; 
@@ -177,8 +198,16 @@
     <h1>ASCII Art <span>Web Studio</span></h1>
     <div class="subtitle">Convert custom text strings into functional terminal text banners instantly.</div>
     
+    <!-- Appends and displays system routing / field runtime errors validation dynamically -->
+    {{if .Error}}
+    <div class="error-container">
+        <span>⚠️</span>
+        <div>{{.Error}}</div>
+    </div>
+    {{end}}
+
     <form action="/ascii-art" method="POST">
-        <textarea name="text" rows="5" placeholder="Enter the text parameters you want transformed..." required></textarea>
+        <textarea name="text" rows="5" placeholder="Enter the text parameters you want transformed..."></textarea>
         
         <div class="options">
             <label class="radio-container">
@@ -196,10 +225,10 @@
     </form>
 
     <!-- Appends and prints the resulting data canvas values cleanly -->
-    {{if .}}
+    {{if .Result}}
     <div class="result-container">
         <div class="result-title">// Processing completed. Terminal output block:</div>
-        <pre>{{.}}</pre>
+        <pre>{{.Result}}</pre>
     </div>
     <a href="/" class="reset-link">← Clear and rewrite string</a>
     {{end}}

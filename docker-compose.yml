@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  ascii-art-web:
+    image: ascii-art-web:1.0
+    container_name: ascii-art-web-container
+    
+    # Metadata labels for container identification and orchestration
+    labels:
+      app: "ascii-art-web"
+      version: "1.0"
+      environment: "production"
+      managed-by: "docker-compose"
+      team: "development"
+      description: "ASCII Art Web Application"
+    
+    # Port mapping
+    ports:
+      - "8080:8080"
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 256M
+        reservations:
+          cpus: '0.5'
+          memory: 128M
+    
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    
+    # Read-only root filesystem (if applicable)
+    read_only: false
+
+networks:
+  default:
+    driver: bridge

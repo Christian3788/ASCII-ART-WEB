@@ -3,17 +3,27 @@ package main
 import (
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
-var tmpl *template.Template
+// Global template cache container
+var templates *template.Template
+
+// PageData passes structured content to templates/index.html
+type PageData struct {
+	Result string // Holds ASCII art
+	Error  string // Holds error message to display
+}
 
 func main() {
-	// Endpoints mapped to handlers
+	// Clean path resolution for stability
+	tmplPath := filepath.Clean("templates/index.html")
+	templates = template.Must(template.ParseFiles(tmplPath))
+
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/ascii-art", asciiHandler)
 
@@ -23,38 +33,42 @@ func main() {
 	}
 }
 
-// GET / - Renders the main page
+// renderError injects errors safely into index.html layout with explicit HTTP status code
+func renderError(w http.ResponseWriter, msg string, statusCode int) {
+	w.WriteHeader(statusCode)
+	data := PageData{Error: msg}
+	if err := templates.ExecuteTemplate(w, "index.html", data); err != nil {
+		log.Printf("Failed to render error template: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.Error(w, "404 Not Found", http.StatusNotFound)
+		renderError(w, "404 Not Found: Page does not exist", http.StatusNotFound)
 		return
 	}
 
 	if r.Method != http.MethodGet {
-		http.Error(w, "400 Bad Request: Method must be GET", http.StatusBadRequest)
+		renderError(w, "405 Method Not Allowed: Method must be GET", http.StatusMethodNotAllowed)
 		return
 	}
 
-	var err error
-	tmpl, err = template.ParseFiles("templates/index.html")
-	if err != nil {
-		http.Error(w, "404 Not Found: Template file missing", http.StatusNotFound)
-		return
+	// Render home cleanly via cache container
+	if err := templates.ExecuteTemplate(w, "index.html", nil); err != nil {
+		log.Printf("Failed to render home template: %v", err)
+		renderError(w, "500 Internal Server Error: Template error", http.StatusInternalServerError)
 	}
-
-	w.WriteHeader(http.StatusOK)
-	tmpl.Execute(w, nil)
 }
 
-// POST /ascii-art - Processes form and displays ASCII art
 func asciiHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		http.Error(w, "400 Bad Request: Method must be POST", http.StatusBadRequest)
+		renderError(w, "405 Method Not Allowed: Method must be POST", http.StatusMethodNotAllowed)
 		return
 	}
 
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "400 Bad Request: Failed to parse form", http.StatusBadRequest)
+		renderError(w, "400 Bad Request: Failed to parse form data", http.StatusBadRequest)
 		return
 	}
 
@@ -62,38 +76,37 @@ func asciiHandler(w http.ResponseWriter, r *http.Request) {
 	banner := r.FormValue("banner")
 
 	if text == "" || (banner != "standard" && banner != "shadow" && banner != "thinkertoy") {
-		http.Error(w, "400 Bad Request: Missing text or invalid banner choice", http.StatusBadRequest)
+		renderError(w, "400 Bad Request: Missing text input or invalid banner choice", http.StatusBadRequest)
 		return
 	}
 
-	filePath := fmt.Sprintf("banners/%s.txt", banner)
+	// Sanitize path using filepath.Clean to enforce directory safety boundaries
+	filePath := filepath.Clean(fmt.Sprintf("banners/%s.txt", banner))
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		http.Error(w, "404 Not Found: Banner file missing", http.StatusNotFound)
+		renderError(w, "404 Not Found: Banner font style missing on server", http.StatusNotFound)
 		return
 	}
 
 	result, err := generateAscii(text, banner)
 	if err != nil {
-		http.Error(w, "500 Internal Server Error: "+err.Error(), http.StatusInternalServerError)
+		renderError(w, "500 Internal Server Error: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	tmpl, err = template.ParseFiles("templates/index.html")
-	if err != nil {
-		http.Error(w, "404 Not Found: Template missing during rendering", http.StatusNotFound)
-		return
+	// Render output text cleanly via template layout
+	data := PageData{Result: result}
+	if err := templates.ExecuteTemplate(w, "index.html", data); err != nil {
+		log.Printf("Failed to render response template: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
-
-	w.WriteHeader(http.StatusOK)
-	tmpl.Execute(w, result)
 }
 
-// Core Engine: Calculates and generates the ASCII lines cleanly
 func generateAscii(text, banner string) (string, error) {
 	text = strings.ReplaceAll(text, "\r\n", "\n")
 
-	filePath := fmt.Sprintf("banners/%s.txt", banner)
-	content, err := ioutil.ReadFile(filePath)
+	filePath := filepath.Clean(fmt.Sprintf("banners/%s.txt", banner))
+	// Replaced deprecated ioutil.ReadFile with os.ReadFile
+	content, err := os.ReadFile(filePath)
 	if err != nil {
 		return "", fmt.Errorf("could not read banner file for %s", banner)
 	}

@@ -1,0 +1,16 @@
+.git
+.gitignore
+README.md
+LICENSE
+.DS_Store
+*.md
+main_test.go
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.env
+.env.local
+coverage.out
+*.prof
